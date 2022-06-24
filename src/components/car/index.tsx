@@ -13,19 +13,10 @@ import {
 
 import Gasoline from '../../assets/gasoline.svg'; 
 import { RectButtonProps } from 'react-native-gesture-handler';
-
-interface CardData {
-  brand: string; 
-  name: string; 
-  rent: {
-    period: string; 
-    price: number;
-  }, 
-  thumb_nail: string; 
-}
+import { CarDTO } from '../../dtos/CarDTO';
  
 interface CarProps extends RectButtonProps {
-  data: CardData; 
+  data: CarDTO; 
 }
 
 export function Car({ data, ...rest }: CarProps): JSX.Element {
@@ -48,7 +39,7 @@ export function Car({ data, ...rest }: CarProps): JSX.Element {
 
       </Details>
 
-      <CarImage source={{ uri: data.thumb_nail}} resizeMode="contain" />
+      <CarImage source={{ uri: data.thumbnail}} resizeMode="contain" />
     </Container>
   )
 }
