@@ -29,19 +29,8 @@ export function Home(): JSX.Element {
 
   const navigation = useNavigation(); 
 
-  const car: CardData = {
-    brand: "Audi",
-    name: "RS 5 Coupé",
-    rent: {
-      period: "Ao dia",
-      price: 120,
-    },
-    thumb_nail:
-      "https://freebiescloud.com/wp-content/uploads/2021/03/Audi-RS6-Avant-2021-1.png",
-  };
-
-  function handleCarDetails(){
-    navigation.navigate({ name: 'CarDetails', });
+  function handleCarDetails(car: CarDTO){
+    navigation.navigate('CarDetails' as never, { car } as never);
   }
 
   useEffect(() => {
@@ -78,7 +67,7 @@ export function Home(): JSX.Element {
         <CarList
         data={cars}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <Car data={item} onPress={handleCarDetails} />}
+        renderItem={({ item }) => <Car data={item} onPress={() => handleCarDetails(item)} />}
       />
       }
       

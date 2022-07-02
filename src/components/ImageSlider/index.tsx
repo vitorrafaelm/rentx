@@ -23,7 +23,7 @@ export function ImageSlider({ imagesUrl }: Props): JSX.Element {
     </ImagesIndexes>
 
     <CarImageWrapper>
-      <CarImage source={{ uri: 'https://freebiescloud.com/wp-content/uploads/2021/03/Audi-RS6-Avant-2021-1.png' }} resizeMode="contain" />
+      <CarImage source={{ uri: imagesUrl[0] }} resizeMode="contain" />
     </CarImageWrapper>
   </Container>
  )
