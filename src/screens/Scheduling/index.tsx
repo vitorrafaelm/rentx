@@ -27,7 +27,7 @@ export function Scheduling(): JSX.Element {
   const navigation = useNavigation(); 
 
   function handleConfirmRental(){
-    navigation.navigate({ name: 'SchedulingDetails' }); 
+    navigation.navigate('SchedulingDetails' as never); 
   }
 
   function handleBack() {
