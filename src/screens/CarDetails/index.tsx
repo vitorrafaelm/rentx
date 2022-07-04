@@ -36,7 +36,9 @@ export function CarDetails(): JSX.Element {
   const { car } = router.params as Params; 
 
   function handleConfirm() {
-    navigation.navigate({ name: 'Scheduling'});
+    navigation.navigate('Scheduling' as never, {
+      car
+    } as never);
   }
 
   function handleBack() {

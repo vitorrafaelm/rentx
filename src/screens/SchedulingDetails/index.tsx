@@ -49,13 +49,18 @@ export function SchedulingDetails(): JSX.Element {
   const navigation = useNavigation(); 
 
   function handleConfirm(){
-    navigation.navigate({ name: 'SchedulingComplete'}); 
+    navigation.navigate('SchedulingComplete' as never); 
   }
+
+  function handleBack() {
+    navigation.goBack(); 
+  }
+
 
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={handleBack} />
       </Header>
 
       <CarImages>
