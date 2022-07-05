@@ -91,7 +91,7 @@ export function CarDetails(): JSX.Element {
       </Content>
 
       <Footer>
-        <Button title="Escolher período do aluguel" onPress={handleConfirm} />
+        <Button title="Escolher período do aluguel" onPress={handleConfirm} enabled={true} />
       </Footer>
 
     </Container>
