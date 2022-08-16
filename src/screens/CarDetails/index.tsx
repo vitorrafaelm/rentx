@@ -1,4 +1,16 @@
 import React from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { StyleSheet } from 'react-native'; 
+import { useTheme } from 'styled-components'; 
+
+import Animated, {
+  useSharedValue, 
+  useAnimatedScrollHandler, 
+  useAnimatedStyle,
+  interpolate,
+  Extrapolate,
+} from 'react-native-reanimated';
+
 import { Accessory } from "../../components/Accessory";
 
 import { BackButton } from "../../components/backButton";
@@ -9,7 +21,6 @@ import {
   Container,
   Header,
   CarImages,
-  Content,
   Details,
   Description,
   Brand,
@@ -21,9 +32,11 @@ import {
   Accessories, 
   Footer,
 } from "./styled";
-import { useNavigation, useRoute } from "@react-navigation/native";
+
 import { CarDTO } from "../../dtos/CarDTO";
 import { getAccessoryIcon } from "../../utils/getAccessoryItem";
+import { getStatusBarHeight } from "react-native-iphone-x-helper";
+import { StatusBar } from "react-native";
 
 interface Params {
   car: CarDTO;
@@ -32,6 +45,33 @@ interface Params {
 export function CarDetails(): JSX.Element {
   const navigation = useNavigation(); 
   const router = useRoute(); 
+  const theme = useTheme(); 
+
+  const scrollY = useSharedValue(0); 
+  const scrollHandle = useAnimatedScrollHandler(event => {
+    scrollY.value = event.contentOffset.y;
+  }); 
+  const headerStyleAnimation = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        scrollY.value, 
+        [0, 200], 
+        [200, 94], 
+        Extrapolate.CLAMP,
+      )
+    }
+  }); 
+
+  const slideCarsStyleAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        scrollY.value, 
+        [0, 150], 
+        [1, 0], 
+        Extrapolate.CLAMP,
+      )
+    }
+  })
 
   const { car } = router.params as Params; 
 
@@ -47,15 +87,36 @@ export function CarDetails(): JSX.Element {
 
   return (
     <Container>
-      <Header>
-        <BackButton onPress={handleBack} />
-      </Header>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+       />
 
-      <CarImages>
-        <ImageSlider imagesUrl={car.photos} />
-      </CarImages>
+       <Animated.View style={[
+        headerStyleAnimation, 
+        styles.header, 
+        { backgroundColor: theme.colors.background_secondary }
+        ]}>
+        <Header>
+          <BackButton onPress={handleBack} />
+        </Header>
 
-      <Content>
+        <Animated.View style={[slideCarsStyleAnimation]}>
+          <CarImages>
+            <ImageSlider imagesUrl={car.photos} />
+          </CarImages>
+        </Animated.View>
+      </Animated.View>
+
+      <Animated.ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          paddingTop: getStatusBarHeight() + 160,
+        }}
+        showsVerticalScrollIndicator={false}
+        onScroll={scrollHandle}
+        scrollEventThrottle={16}
+      >
         <Details>
           <Description>
             <Brand>{car.brand}</Brand>
@@ -84,11 +145,9 @@ export function CarDetails(): JSX.Element {
         
 
         <About>
-          {
-            car.about
-          }
+          {car.about}
         </About>
-      </Content>
+      </Animated.ScrollView>
 
       <Footer>
         <Button title="Escolher período do aluguel" onPress={handleConfirm} enabled={true} />
@@ -97,3 +156,12 @@ export function CarDetails(): JSX.Element {
     </Container>
   );
 }
+
+
+const styles = StyleSheet.create({
+  header: {
+    position: 'absolute', 
+    overflow: 'hidden',
+    zIndex: 1,
+  },
+})

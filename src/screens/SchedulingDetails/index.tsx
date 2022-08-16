@@ -72,12 +72,12 @@ export function SchedulingDetails(): JSX.Element {
     ];
 
     try {
-      await api.post(`/schedules_byusers/`, {
-        user_id: 1,
-        car,
-        startDate: rentalPeriod?.start,
-        endDate: rentalPeriod?.end,
-      });
+      // await api.post(`/schedules_byusers/`, {
+      //   user_id: 23,
+      //   car,
+      //   startDate: rentalPeriod?.start,
+      //   endDate: rentalPeriod?.end,
+      // });
 
       api
         .put(`/schedules_bycars/${car.id}`, {
